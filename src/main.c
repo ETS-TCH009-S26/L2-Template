@@ -9,9 +9,19 @@
 #include <stdlib.h> // pour EXIT_SUCCESS
 
 int main(void) {
-    printf("Bonjour, TCH009 !\n");
+    int annee_actuelle;     // Année de la date d'aujourd'hui
+    int annee_naissance;    // Année de naissance de l'usager
+    int age = 0;
 
-    // La valeur retournée par main() indique au système si tout s'est bien
-    // passé : EXIT_SUCCESS (0) = succès.
+    printf("Veuillez saisir l'annee actuelle : ");
+    scanf("%d", &annee_actuelle);
+
+    printf("Veuillez saisir votre annee de naissance : ");
+    scanf("%d", &annee_naissance);
+
+    // Calcul de l'age
+    age = annee_actuelle - annee_naissance;
+
+    printf("Au cas ou vous l'auriez oublie, vous avez : %d ans.\n", age);
     return EXIT_SUCCESS;
 }

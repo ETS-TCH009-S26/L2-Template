@@ -13,18 +13,24 @@
     "editor.tabCompletion": "off",
     "editor.parameterHints.enabled": false,
     "editor.inlineSuggest.enabled": false,
+    "github.copilot.chat.commitMessageGeneration.instructions": [
+        {
+            "file": ".copilot/commit-message-instructions.md"
+        }
+    ],
     "C_Cpp.autocomplete": "disabled",
     "C_Cpp.suggestSnippets": false,
     "C_Cpp.autocompleteAddParentheses": false,
     "github.copilot.enable": {
         "*": false
     },
-
     // --- Édition ------------------------------------------------------------
     "editor.formatOnSave": true,
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
-    "editor.rulers": [100],
+    "editor.rulers": [
+        100
+    ],
     "files.encoding": "utf8",
     "files.eol": "\n",
     "files.insertFinalNewline": true,
@@ -34,12 +40,10 @@
     },
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.clang_format_style": "file",
-
     // --- CMake --------------------------------------------------------------
     "cmake.useCMakePresets": "always",
     "cmake.configureOnOpen": true,
     "cmake.options.statusBarVisibility": "visible",
-
     // --- Orthographe (commentaires en français) -----------------------------
     "cSpell.language": "fr,en"
 }
