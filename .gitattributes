@@ -1,0 +1,18 @@
+# Normalisation des fins de ligne : le depot contient toujours des LF,
+# peu importe le systeme d'exploitation utilise (Windows, macOS, Linux).
+* text=auto eol=lf
+
+*.c   text eol=lf
+*.h   text eol=lf
+*.md  text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+*.png binary
+*.jpg binary
+*.pdf binary
+*.zip binary

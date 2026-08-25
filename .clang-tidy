@@ -1,0 +1,20 @@
+# Analyse statique : on garde les verifications qui attrapent de vrais bogues
+# et on desactive celles qui ne feraient que du bruit pour des debutants.
+Checks: >
+  bugprone-*,
+  clang-analyzer-*,
+  cert-*,
+  misc-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -readability-magic-numbers,
+  -readability-identifier-length,
+  -readability-braces-around-statements,
+  -readability-isolate-declaration,
+  -readability-function-cognitive-complexity,
+  -misc-no-recursion,
+  -cert-err34-c
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '(src|tests)/'
+FormatStyle: file

@@ -1,0 +1,11 @@
+# Style de mise en forme du code C (applique automatiquement par l'IDE).
+BasedOnStyle: LLVM
+Language: Cpp
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+InsertNewlineAtEOF: true

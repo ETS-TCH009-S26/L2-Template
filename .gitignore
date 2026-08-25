@@ -1,0 +1,28 @@
+# Dossiers de compilation
+build/
+cmake-build-*/
+out/
+CMakeUserPresets.json
+
+# Fichiers generes par le compilateur
+*.o
+*.obj
+*.exe
+*.out
+*.a
+*.so
+*.dll
+compile_commands.json
+
+# Configuration propre aux IDE (ne doit pas etre partagee)
+.idea/
+.vs/
+.cache/
+*.user
+
+# Systeme
+.DS_Store
+Thumbs.db
+
+# Environnements
+.env

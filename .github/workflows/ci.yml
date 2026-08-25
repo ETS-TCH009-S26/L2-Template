@@ -1,0 +1,133 @@
+name: Compilation et tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    name: Compiler et tester
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer les outils
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential cmake ninja-build clang-format clang-tidy
+
+      # --- Étapes bloquantes : le code DOIT compiler et passer les tests -----
+      - name: Configurer (CMake)
+        id: configure
+        run: |
+          set -o pipefail
+          cmake --preset defaut 2>&1 | tee configure.log
+
+      - name: Compiler
+        id: build
+        run: |
+          set -o pipefail
+          cmake --build --preset defaut 2>&1 | tee build.log
+
+      - name: Tests unitaires (CTest)
+        id: test
+        run: |
+          set -o pipefail
+          ctest --preset defaut 2>&1 | tee test.log
+
+      # --- Étapes NON bloquantes : style et analyse (avertissement seulement)
+      - name: Vérifier la mise en forme (clang-format)
+        id: format
+        if: always()
+        run: |
+          FICHIERS=$(find src tests -name '*.c' -o -name '*.h' 2>/dev/null)
+          if [ -z "$FICHIERS" ]; then echo "Aucun fichier." > format.log; exit 0; fi
+          clang-format --dry-run --Werror $FICHIERS > format.log 2>&1 && echo "OK" >> format.log || true
+
+      - name: Analyse statique (clang-tidy)
+        id: tidy
+        if: always()
+        run: |
+          if [ ! -f build/compile_commands.json ]; then
+            echo "Projet non configuré : analyse ignorée." > tidy.log
+            exit 0
+          fi
+          FICHIERS=$(find src -name '*.c')
+          # Le décompte des avertissements des en-têtes système est du bruit : on le retire.
+          clang-tidy -p build --quiet $FICHIERS 2>&1 | grep -v 'warnings generated' > tidy.log || true
+
+      # --- Résumé lisible ----------------------------------------------------
+      - name: Résumé
+        if: always()
+        run: |
+          resume() { echo "$1" >> "$GITHUB_STEP_SUMMARY"; }
+          extrait() { tail -n 40 "$1" 2>/dev/null || echo "(aucune sortie)"; }
+
+          resume "# Résultat de la vérification automatique"
+          resume ""
+
+          if [ "${{ steps.configure.outcome }}" != "success" ]; then
+            resume "## ❌ La configuration CMake a échoué"
+            resume "Le projet n'a même pas pu être préparé pour la compilation."
+            resume "Vérifiez que \`CMakeLists.txt\` et \`CMakePresets.json\` n'ont pas été modifiés."
+            resume ""
+            resume '```'
+            extrait configure.log >> "$GITHUB_STEP_SUMMARY"
+            resume '```'
+          elif [ "${{ steps.build.outcome }}" != "success" ]; then
+            resume "## ❌ Le code ne compile pas"
+            resume "Corrigez les erreurs ci-dessous, puis refaites un \`git push\`."
+            resume "Astuce : la **première** erreur est presque toujours la vraie cause."
+            resume ""
+            resume '```'
+            extrait build.log >> "$GITHUB_STEP_SUMMARY"
+            resume '```'
+          elif [ "${{ steps.test.outcome }}" != "success" ]; then
+            resume "## ❌ Le code compile, mais des tests échouent"
+            resume "Un test qui échoue indique que le programme ne donne pas le résultat attendu."
+            resume ""
+            resume '```'
+            extrait test.log >> "$GITHUB_STEP_SUMMARY"
+            resume '```'
+          else
+            resume "## ✅ Compilation réussie et tous les tests passent"
+            resume ""
+            resume '```'
+            extrait test.log >> "$GITHUB_STEP_SUMMARY"
+            resume '```'
+          fi
+
+          resume ""
+          resume "---"
+          resume "### Style et analyse (informatif — ne fait jamais échouer la vérification)"
+          resume ""
+
+          if grep -q '^OK$' format.log 2>/dev/null; then
+            resume "- ✅ Mise en forme conforme à \`.clang-format\`."
+          else
+            resume "<details><summary>ℹ️ Mise en forme perfectible (clang-format)</summary>"
+            resume ""
+            resume "Dans VS Code, **Ctrl+S** reformate automatiquement. Dans CLion : **Ctrl+Alt+L**."
+            resume ""
+            resume '```'
+            extrait format.log >> "$GITHUB_STEP_SUMMARY"
+            resume '```'
+            resume "</details>"
+          fi
+
+          if [ -s tidy.log ]; then
+            resume "<details><summary>ℹ️ Suggestions de l'analyse statique (clang-tidy)</summary>"
+            resume ""
+            resume '```'
+            extrait tidy.log >> "$GITHUB_STEP_SUMMARY"
+            resume '```'
+            resume "</details>"
+          else
+            resume "- ✅ Aucune remarque de l'analyse statique."
+          fi

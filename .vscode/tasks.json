@@ -1,0 +1,56 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Compiler",
+            "detail": "Configure puis compile le projet (Ctrl+Maj+B)",
+            "type": "shell",
+            "command": "cmake --preset defaut && cmake --build --preset defaut",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Configurer",
+            "detail": "Prépare le dossier build/ (rarement nécessaire seul)",
+            "type": "shell",
+            "command": "cmake --preset defaut",
+            "problemMatcher": []
+        },
+        {
+            "label": "Exécuter",
+            "detail": "Compile puis lance le programme",
+            "type": "shell",
+            "command": "\"${workspaceFolder}/build/bin/programme\"",
+            "windows": {
+                "command": "& \"${workspaceFolder}/build/bin/programme.exe\""
+            },
+            "dependsOn": "Compiler",
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            "label": "Tester",
+            "detail": "Compile puis exécute les tests unitaires",
+            "type": "shell",
+            "command": "ctest --preset defaut",
+            "dependsOn": "Compiler",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Nettoyer",
+            "detail": "Supprime le dossier build/",
+            "type": "shell",
+            "command": "cmake -E rm -rf build",
+            "problemMatcher": []
+        }
+    ]
+}

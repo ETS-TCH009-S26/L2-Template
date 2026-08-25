@@ -1,0 +1,34 @@
+{
+    "version": 3,
+    "configurePresets": [
+        {
+            "name": "defaut",
+            "displayName": "Défaut (Debug)",
+            "description": "Configuration utilisée par VS Code, CLion et la CI.",
+            "binaryDir": "${sourceDir}/build",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "defaut",
+            "displayName": "Compiler",
+            "configurePreset": "defaut",
+            "configuration": "Debug"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "defaut",
+            "displayName": "Tester",
+            "configurePreset": "defaut",
+            "configuration": "Debug",
+            "output": {
+                "outputOnFailure": true
+            }
+        }
+    ]
+}
