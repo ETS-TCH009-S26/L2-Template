@@ -14,10 +14,10 @@ int main(void) {
     int age = 0;
 
     printf("Veuillez saisir l'annee actuelle : ");
-    scanf("%d", &annee_actuelle);
+    scanf_s("%d", &annee_actuelle);
 
     printf("Veuillez saisir votre annee de naissance : ");
-    scanf("%d", &annee_naissance);
+    scanf_s("%d", &annee_naissance);
 
     // Calcul de l'age
     age = annee_actuelle - annee_naissance;

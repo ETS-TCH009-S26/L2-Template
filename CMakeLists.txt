@@ -27,9 +27,9 @@ endif()
 # Tous les .c de src/ sont compiles ; main.c est mis a part pour que les
 # tests puissent reutiliser vos autres fichiers sans conflit de main().
 file(GLOB SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
-list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.c")
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/exercice0.c")
 
-add_executable(programme src/main.c ${SOURCES})
+add_executable(programme src/exercice0.c ${SOURCES})
 target_include_directories(programme PRIVATE src)
 
 # --- Tests unitaires (Unity) -----------------------------------------------
