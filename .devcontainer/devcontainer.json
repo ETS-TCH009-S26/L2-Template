@@ -1,5 +1,5 @@
 {
-    "name": "TCH009 (C / CMake)",
+    "name": "TCH009-Template",
     "build": {
         "dockerfile": "Dockerfile"
     },
